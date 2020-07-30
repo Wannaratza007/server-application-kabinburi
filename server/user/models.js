@@ -6,7 +6,7 @@ var _model = {
         var knex = require('knex')(configs);
         console.log(body);
         try {
-            let res = await knex.select('*').from('user')
+            let res = await knex('user')
                 .where('username', body.username)
                 .andWhere('password', body.password);
             console.log(res);
@@ -22,7 +22,7 @@ var _model = {
         var knex = require('knex')(configs);
         console.log(body);
         try {
-            let [res] = await knex.select('*').from('user')
+            let [res] = await knex('user')
                 .where('firstname', body.firstname)
                 .andWhere('username', body.username);
             if (res == 0 || res == null) {
@@ -87,9 +87,9 @@ var _model = {
         console.log(body);
         try {
             if (body.username == '' || body.username == null) {
-                var res = await knex.select('*').from('user').whereNot('status', '=', 'admin').limit(body.top);
+                var res = await knex('user').whereNot('status', '=', 'admin').limit(body.top);
             } else {
-                var res = await knex.select('*').from('user')
+                var res = await knex('user')
                     .where('firstname', 'like', `%${body.username}%`)
             }
             console.log(res);
@@ -108,6 +108,19 @@ var _model = {
             await knex('user').where('userID', '=', body.id).del();
             knex.destroy();
             return { status: true, result: 'Deleted successfully' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.toString() };
+        }
+    },
+
+    getTeacher: async function (body) {
+        var knex = require('knex')(configs);
+        console.log(body);
+        try {
+            let res = await knex('connect_teacher').limit(body.top);
+            knex.destroy();
+            return { status: true, result: res };
         } catch (error) {
             knex.destroy();
             return { status: false, result: error.toString() };

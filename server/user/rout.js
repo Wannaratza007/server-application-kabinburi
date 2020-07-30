@@ -32,4 +32,9 @@ module.exports = function (router) {
         res.json(_result);
     });
 
+    router.post('/getteacher', async function (req, res) {
+        let _result = await _model.getTeacher(req.body);
+        res.json(_result);
+    });
+
 } 
