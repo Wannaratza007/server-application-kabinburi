@@ -1,4 +1,6 @@
 const configs = require('../../config/database');
+const dateFormat = require('dateformat');
+const fs = require('fs');
 
 var _model = {
 
@@ -66,8 +68,8 @@ var _model = {
         try {
             var query = `SELECT * FROM student std 
             LEFT JOIN visiter vst ON std.studenID = vst.StudentID 
-            WHERE std.studenID = ${body.id}`
-            let [res] = await knex.raw(query);
+            WHERE std.studenID = ?`
+            let [res] = await knex.raw(query, [body.id]);
             console.log(res);
             knex.destroy();
             return { status: true, result: res };
@@ -126,6 +128,19 @@ var _model = {
         }
     },
 
+    reusedatdelete: async function (body) {
+        var knex = require('knex')(configs);
+        console.log(body);
+        try {
+            await knex('student').where('studenID', '=', body.id).update({ is_active: 1 });
+            knex.destroy();
+            return { status: true, result: 'Deleteted successfully' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.toString() };
+        }
+    },
+
     getdelete: async function (body) {
         var knex = require('knex')(configs);
         console.log(body);
@@ -160,6 +175,43 @@ var _model = {
         }
 
     },
+
+    visitHome: async function (body) {
+        var knex = require('knex')(configs);
+        console.log(body);
+        try {
+            //#region [Image Addresses]
+            var nameaddress = body.name_image_address;
+            var imgaddress = body.image_address;
+            console.log('nameaddress', nameaddress);
+            console.log('imgaddress', imgaddress);
+            knex.destroy();
+            return { status: true, };
+            //#endregion 
+
+            //#region [Image_Map]
+            var namemap = body.name_image_map;
+            var imgmap = body.image_map;
+            console.log('namemap', namemap);
+            console.log('imgmap', imgmap);
+            var realFile = Buffer.from(imgmap, "base64");
+            var Extension = namemap.substr(namemap.lastIndexOf('.') + 1);
+            namemap = "Messages" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
+            var path = '../../image/visit/';
+            console.log("Name Image :" + namemap);
+            fs.writeFile(__dirname + (path + namemap), realFile, function (err) {
+                if (err)
+                    console.log(err);
+            });
+            console.log(realFile);
+            //#endregion
+            knex.destroy();
+            return { status: true };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    }
 
 }
 

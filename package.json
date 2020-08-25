@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dateformat": "^3.0.3",
     "express": "^4.17.1",
     "knex": "^0.21.2",
     "mysql": "^2.18.1",

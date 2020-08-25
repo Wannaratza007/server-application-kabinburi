@@ -2,6 +2,11 @@ var _model = require('./models');
 
 module.exports = function (router) {
 
+    router.post('/showimage', async function (req, res) {
+        let _result = await _model.showimage(req.body);
+        res.json(_result);
+    });
+
     router.post('/messages', async function (req, res) {
         let _result = await _model.messages(req.body);
         res.json(_result);

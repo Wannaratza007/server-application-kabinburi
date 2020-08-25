@@ -22,6 +22,11 @@ module.exports = function (router) {
         res.json(_result);
     });
 
+    router.post('/reusedatdelete', async function (req, res) {
+        let _result = await _model.reusedatdelete(req.body);
+        res.json(_result);
+    });
+
     router.post('/getdelete', async function (req, res) {
         let _result = await _model.getdelete(req.body);
         res.json(_result);
@@ -30,6 +35,11 @@ module.exports = function (router) {
     router.post('/deleteDataStudent', async function (req, res) {
         let _result = await _model.deleteDataStudent(req.body);
         res.json(_result);
+    });
+
+    router.post('/visitHome', async function (req, res){
+        let _result = await _model.visitHome(req.body);
+        res.send(_result);
     });
 
 } 
