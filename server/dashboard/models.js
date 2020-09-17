@@ -2,7 +2,7 @@ const configs = require('../../config/database');
 const dateFormat = require('dateformat');
 const fs = require('fs');
 
-var _model = {
+const _model = {
 
     showimage: async function (body) {
         console.log(body);
@@ -89,6 +89,34 @@ var _model = {
             await knex.insert(objdata).into("community");
             knex.destroy();
             return { status: true, result: 'Insert Success' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.toString() };
+        }
+    },
+
+    dashboard_teacher: async function (body) {
+        console.log(body);
+        var knex = require('knex')(configs);
+        try {
+            let _res_visit = await knex('student').count({ p: 'is_active' }).where('is_active', '=', 1).andWhere('deparment', '=', body.deparment);
+            let _res_notvisit = await knex('student').count({ p: 'is_active' }).where('is_active', '=', 0).andWhere('deparment', '=', body.deparment);
+            knex.destroy();
+            return { status: true, _res_visit, _res_notvisit };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.toString() };
+        }
+    },
+
+    dashboard_admin: async function (body) {
+        console.log(body);
+        var knex = require('knex')(configs);
+        try {
+            let res = await knex('student').count({ p: 'is_active' }).where('is_active', '=', 0);
+            console.log(res);
+            knex.destroy();
+            return { status: true, result: res };
         } catch (error) {
             knex.destroy();
             return { status: false, result: error.toString() };

@@ -27,4 +27,13 @@ module.exports = function (router) {
         res.json(_result);
     });
 
+    router.post('/dashboard-teacher', async (req, res) => {
+        let _result = await _model.dashboard_teacher(req.body);
+        res.json(_result);
+    });
+
+    router.post('/dashboard-admin', async (req, res) => {
+        let _result = await _model.dashboard_admin(req.body);
+        res.json(_result);
+    });
 } 

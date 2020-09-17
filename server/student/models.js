@@ -4,6 +4,152 @@ const fs = require('fs');
 
 var _model = {
 
+    //#region [new]
+
+    get_student: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            let query = `SELECT * from data_student 
+            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
+            WHERE deparment_name = '${body.deparment}'AND firstnameSTD LIKE '%${body.firstnameSTD}%' AND  is_active = 1 `
+            let res = await knex.raw(query);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: err.message };
+        }
+    },
+
+    list_student: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            let query = `SELECT  * from data_student 
+            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
+            WHERE deparment_name = '${body.deparment}' AND  is_active = 1  LIMIT ${body.top}`
+            let res = await knex.raw(query);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: err.message };
+        }
+    },
+
+    get_studentId: async function (body) {
+        var knex = require('knex')(configs);
+        try {
+            var query = `SELECT  * from data_student 
+            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
+            WHERE student = ?`
+            let [res] = await knex.raw(query, [body.id]);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    add_studentId: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            let obj = {
+                deparmentID: body,
+                codeSTD: body,
+                prefixSTD: body,
+                firstnameSTD: body,
+                lastnameSTD: body,
+                phonesSTD: body,
+                cardNumber: body,
+                studygroup: body,
+                prefixGD: body,
+                firstnameGD: body,
+                lastnameGD: body,
+                phonesGD: body,
+                numberHomes: body,
+                village: body,
+                road: body,
+                province: body,
+                aumphuer: body,
+                district: body,
+                post: body,
+            }
+            await knex('student').insert(obj);
+            knex.destroy();
+            return { status: true, result: 'Inserted successfully' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.toString() };
+        }
+    },
+
+    teacher_delete: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            await knex('student').where('studenID', '=', body.id).update({ is_active: 0 });
+            knex.destroy();
+            return { status: true, result: 'Deleteted successfully' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    reuse_student: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            await knex('student').where('studenID', '=', body.id).update({ is_active: 1 });
+            knex.destroy();
+            return { status: true, result: 'Reuse Data successfully' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    get_student_delete: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            let query = `SELECT * from data_student 
+            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment
+            Where  firstnameSTD Like '%${body.firstnameSTD}%' AND is_active = 0`
+            // let res = await knex('data_student').where("is_active", 0);
+            let res = await knex.raw(query);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    list_student_delete: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            let res = await knex('data_student').where("is_active", 0).limit(body.top);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    delete_student: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            await knex('student').where('studenID', '=', body.id).del();
+            knex.destroy();
+            return { status: true, result: 'Delete Success' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    //#endregion [new]
+
     getStudent: async function (body) {
         var knex = require('knex')(configs);
         console.log(body);
@@ -173,7 +319,6 @@ var _model = {
             knex.destroy();
             return { status: false, result: error.toString() };
         }
-
     },
 
     visitHome: async function (body) {
