@@ -7,14 +7,19 @@ var _model = {
 
     signin: async (body) => {
         var knex = require('knex')(configs);
+        var md5 = require('md5');
         try {
-            let _pass = await md5(body.password)
-            let obj = {
-                password: _pass,
-            };
-            await knex('users').update(obj);
+            let _pass = await md5(body.password);
+            let query = `SELECT * FROM users u 
+            LEFT JOIN deparments d ON u.deparmentID = d.deparment
+            WHERE u.username = '${body.username}'  AND u.password = '${_pass}'`
+            let [res] = await knex.raw(query);
+            console.log(res);
+            // let res = await knex('users')
+            //     .where('username', body.username)
+            //     .andWhere('password', _pass);
             knex.destroy();
-            return { status: true, result: 'signin successful' };
+            return { status: true, result: res };
         } catch (error) {
             knex.destroy();
             return { result: err.message, status: false };
@@ -23,6 +28,7 @@ var _model = {
 
     signup_user: async (body) => {
         var knex = require('knex')(configs);
+        console.log(body)
         try {
             let _pass = await md5(body.password)
             let obj = {
@@ -44,9 +50,11 @@ var _model = {
 
     signup_teacher: async (body) => {
         var knex = require('knex')(configs);
+        console.log(body);
         try {
             let _pass = await md5(body.password)
             let obj = {
+                deparmentID: body.deparmentID,
                 firstname: body.firstname,
                 lastname: body.lastname,
                 username: body.username,
@@ -98,7 +106,7 @@ var _model = {
     list_users: async (body) => {
         var knex = require('knex')(configs);
         try {
-            let res = await knex('user').whereNot('status', '=', 'admin').limit(body.top);
+            let res = await knex('users').whereNot('status', '=', 'admin').limit(body.top);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {

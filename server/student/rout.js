@@ -10,11 +10,6 @@ module.exports = function (router) {
         res.json(_result);
     });
 
-    router.post(_baseurl + '/list-student', async (req, res) => {
-        let _result = await _model.list_student(req.body);
-        res.json(_result);
-    });
-
     router.post(_baseurl + '/get-studentId', async (req, res) => {
         let _result = await _model.get_studentId(req.body);
         res.json(_result);
@@ -40,16 +35,21 @@ module.exports = function (router) {
         res.json(_result);
     });
 
-    router.post(_baseurl + '/list-student-delete', async (req, res) => {
-        let _result = await _model.list_student_delete(req.body);
-        res.json(_result);
-    });
-
     router.post(_baseurl + '/delete-student', async (req, res) => {
         let _result = await _model.delete_student(req.body);
         res.json(_result);
     });
 
+    router.post(_baseurl + '/visthome-student', async (req, res) => {
+        let _result = await _model.visthome_student(req.body);
+        res.json(_result);
+    });
+
+    router.post(_baseurl + '/pdf', async (req, res) => {
+        let _result = await _model. pdf(req.body);
+        res.json(_result);
+    });
+ 
     //#endregion [new]
 
     router.post('/gettStudentByDeparmentStudent', async function (req, res) {

@@ -11,9 +11,11 @@
   "dependencies": {
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
     "knex": "^0.21.2",
     "md5": "^2.3.0",
     "mysql": "^2.18.1",
-    "mysql2": "^2.1.0"
+    "mysql2": "^2.1.0",
+    "pdfmake": "^0.1.68"
   }
 }

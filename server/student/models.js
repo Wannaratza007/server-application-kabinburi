@@ -9,10 +9,17 @@ var _model = {
     get_student: async (body) => {
         var knex = require('knex')(configs);
         try {
-            let query = `SELECT * from data_student 
-            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
-            WHERE deparment_name = '${body.deparment}'AND firstnameSTD LIKE '%${body.firstnameSTD}%' AND  is_active = 1 `
-            let res = await knex.raw(query);
+            var query = `SELECT * from data_student  std
+            LEFT JOIN deparments d on std.deparmentID = d.deparment  `;
+            if (body.firstnameSTD == '' || body.firstnameSTD == null) {
+                query += `WHERE deparment_name = '${body.deparment}' AND  is_active = 1  LIMIT ${body.top}`
+            } else {
+                query += `WHERE deparment_name = '${body.deparment}' AND firstnameSTD LIKE '%${body.firstnameSTD}%' AND  is_active = 1 `;
+            }
+            // let query = `SELECT * from data_student 
+            // LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
+            // WHERE deparment_name = '${body.deparment}'AND firstnameSTD LIKE '%${body.firstnameSTD}%' AND  is_active = 1 `
+            let [res] = await knex.raw(query);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
@@ -21,22 +28,7 @@ var _model = {
         }
     },
 
-    list_student: async (body) => {
-        var knex = require('knex')(configs);
-        try {
-            let query = `SELECT  * from data_student 
-            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
-            WHERE deparment_name = '${body.deparment}' AND  is_active = 1  LIMIT ${body.top}`
-            let res = await knex.raw(query);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: err.message };
-        }
-    },
-
-    get_studentId: async function (body) {
+    get_studentId: async (body) => {
         var knex = require('knex')(configs);
         try {
             var query = `SELECT  * from data_student 
@@ -55,27 +47,30 @@ var _model = {
         var knex = require('knex')(configs);
         try {
             let obj = {
-                deparmentID: body,
-                codeSTD: body,
-                prefixSTD: body,
-                firstnameSTD: body,
-                lastnameSTD: body,
-                phonesSTD: body,
-                cardNumber: body,
-                studygroup: body,
-                prefixGD: body,
-                firstnameGD: body,
-                lastnameGD: body,
-                phonesGD: body,
-                numberHomes: body,
-                village: body,
-                road: body,
-                province: body,
-                aumphuer: body,
-                district: body,
-                post: body,
+                deparmentID: body.deparmentID,
+                codeSTD: body.codeSTD,
+                prefixSTD: body.prefixSTD,
+                firstnameSTD: body.firstNameSTD,
+                lastnameSTD: body.lastNameSTD,
+                phonesSTD: body.phonesSTD,
+                cardNumber: body.cardNumber,
+                studygroup: body.studygroup,
+                prefixGD: body.prefixGD,
+                firstnameGD: body.firstNameGD,
+                lastnameGD: body.lastNameGD,
+                phonesGD: body.phonesGD,
+                numberHomes: body.numberHomes,
+                village: body.village,
+                road: body.road,
+                // 
+                // province: body,
+                // aumphuer: body,
+                // district: body,
+                // // 
+                // post: body.post,
             }
-            await knex('student').insert(obj);
+            // return;
+            let res = await knex('data_student').insert(obj);
             knex.destroy();
             return { status: true, result: 'Inserted successfully' };
         } catch (error) {
@@ -87,7 +82,7 @@ var _model = {
     teacher_delete: async (body) => {
         var knex = require('knex')(configs);
         try {
-            await knex('student').where('studenID', '=', body.id).update({ is_active: 0 });
+            await knex('data_student').where('student', '=', body.id).update({ is_active: 0 });
             knex.destroy();
             return { status: true, result: 'Deleteted successfully' };
         } catch (error) {
@@ -99,7 +94,7 @@ var _model = {
     reuse_student: async (body) => {
         var knex = require('knex')(configs);
         try {
-            await knex('student').where('studenID', '=', body.id).update({ is_active: 1 });
+            await knex('data_student').where('student', '=', body.id).update({ is_active: 1 });
             knex.destroy();
             return { status: true, result: 'Reuse Data successfully' };
         } catch (error) {
@@ -111,23 +106,14 @@ var _model = {
     get_student_delete: async (body) => {
         var knex = require('knex')(configs);
         try {
-            let query = `SELECT * from data_student 
-            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment
-            Where  firstnameSTD Like '%${body.firstnameSTD}%' AND is_active = 0`
-            // let res = await knex('data_student').where("is_active", 0);
-            let res = await knex.raw(query);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.message };
-        }
-    },
-
-    list_student_delete: async (body) => {
-        var knex = require('knex')(configs);
-        try {
-            let res = await knex('data_student').where("is_active", 0).limit(body.top);
+            var query = `SELECT * from data_student std
+            LEFT JOIN deparments d on std.deparmentID = d.deparment `;
+            if (body.firstnameSTD == '' || body.firstnameSTD == null) {
+                query += `Where is_active = 0 limit ${body.top}`;
+            } else {
+                query += `Where  firstnameSTD Like '%${body.firstnameSTD}%' AND is_active = 0`;
+            }
+            var [res] = await knex.raw(query);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
@@ -139,9 +125,20 @@ var _model = {
     delete_student: async (body) => {
         var knex = require('knex')(configs);
         try {
-            await knex('student').where('studenID', '=', body.id).del();
+            await knex('data_student').where('student', '=', body.id).del();
             knex.destroy();
             return { status: true, result: 'Delete Success' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error.message };
+        }
+    },
+
+    visthome_student: async (body) => {
+        var knex = require('knex')(configs);
+        try {
+            knex.destroy();
+            return { status: true, result: 'Test Success' };
         } catch (error) {
             knex.destroy();
             return { status: false, result: error.message };
@@ -210,12 +207,14 @@ var _model = {
 
     getStudentById: async function (body) {
         var knex = require('knex')(configs);
+        console.log("body");
         console.log(body);
         try {
             var query = `SELECT * FROM student std 
             LEFT JOIN visiter vst ON std.studenID = vst.StudentID 
-            WHERE std.studenID = ?`
-            let [res] = await knex.raw(query, [body.id]);
+            WHERE std.studenID = ${body.id}`
+            console.log(query);
+            let [res] = await knex.raw(query);
             console.log(res);
             knex.destroy();
             return { status: true, result: res };
