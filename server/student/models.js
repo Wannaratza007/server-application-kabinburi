@@ -31,10 +31,12 @@ var _model = {
     get_studentId: async (body) => {
         var knex = require('knex')(configs);
         try {
-            var query = `SELECT  * from data_student 
-            LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
+            var query = `SELECT  * from data_student ds
+            LEFT JOIN deparments d on ds.deparmentID = d.deparment 
+            LEFT JOIN visit_home v on ds.student = v.studentID
             WHERE student = ?`
             let [res] = await knex.raw(query, [body.id]);
+            console.log(res);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
@@ -70,7 +72,7 @@ var _model = {
                 // post: body.post,
             }
             // return;
-            let res = await knex('data_student').insert(obj);
+            await knex('data_student').insert(obj);
             knex.destroy();
             return { status: true, result: 'Inserted successfully' };
         } catch (error) {
@@ -137,8 +139,50 @@ var _model = {
     visthome_student: async (body) => {
         var knex = require('knex')(configs);
         try {
+            // Visit
+            var namevisit = body.fileNamevisit;
+            var imgvisit = body.base64Imagevisit;
+            var realFilevisit = Buffer.from(imgvisit, "base64");
+            var Extension = namevisit.substr(namevisit.lastIndexOf('.') + 1);
+            namevisit = "Messages" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
+            var path = '../../image/visit/';
+            console.log("Name Image :" + namevisit);
+            fs.writeFile(__dirname + (path + namevisit), realFilevisit, function (err) {
+                if (err)
+                    console.log(err);
+            });
+
+            // Address
+            var nameaddress = body.fileNameAddress;
+            var imgaddress = body.base64ImageAddress;
+            var realFileaddress = Buffer.from(imgaddress, "base64");
+            var Extension = nameaddress.substr(nameaddress.lastIndexOf('.') + 1);
+            nameaddress = "Messages" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
+            var path = '../../image/address/';
+            console.log("Name Image :" + nameaddress);
+            fs.writeFile(__dirname + (path + nameaddress), realFileaddress, function (err) {
+                if (err)
+                    console.log(err);
+            });
+
+            let idstd = parseInt(body.studenID);
+            // insert data to database
+            var obj = {
+                studentID: idstd,
+                image_visit: namevisit,
+                image_map: nameaddress,
+                suggestion: body.suggestion,
+                behaviorD: body.behaviorD,
+                behaviorNotD: body.behaviorNotD,
+                problem: body.problem,
+                name_parents: body.nameGD,
+                date_visit: new Date(),
+                visit_by: body.visit_By,
+            };
+            await knex('data_student').where('student', '=', idstd).update(is_visit = 1);
+            await knex('visit_home').insert(obj);
             knex.destroy();
-            return { status: true, result: 'Test Success' };
+            return { status: true, result: 'Save Data Vist Success' };
         } catch (error) {
             knex.destroy();
             return { status: false, result: error.message };

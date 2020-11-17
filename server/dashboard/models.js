@@ -96,16 +96,19 @@ const _model = {
     },
 
     dashboard_teacher: async function (body) {
-        console.log(body);
         var knex = require('knex')(configs);
         try {
-            let _res_visit = await knex('student').count({ p: 'is_active' }).where('is_active', '=', 1).andWhere('deparment', '=', body.deparment);
-            let _res_notvisit = await knex('student').count({ p: 'is_active' }).where('is_active', '=', 0).andWhere('deparment', '=', body.deparment);
+            let _query_visit = `SELECT COUNT(is_visit) as amountvisit FROM data_student 
+                                WHERE is_active = 1 AND is_visit = 1 AND deparmentID = ${body.deparmentid};`
+            let _query_notvisit = `SELECT COUNT(is_visit) as amountnotvisit FROM data_student 
+                                WHERE is_active = 1 AND is_visit = 0 AND deparmentID = ${body.deparmentid};`
+            let [[_res_visit]] = await knex.raw(_query_visit);
+            let [[_res_notvisit]] = await knex.raw(_query_notvisit);
             knex.destroy();
-            return { status: true, _res_visit, _res_notvisit };
+            return { status: true, resultvisit: _res_visit, resultnotvisit: _res_notvisit };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.toString() };
+            return { status: false, result: error.messages() };
         }
     },
 
