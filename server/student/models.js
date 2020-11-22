@@ -30,12 +30,13 @@ var _model = {
 
     get_studentId: async (body) => {
         var knex = require('knex')(configs);
+        let ID = parseInt(body.id);
         try {
             var query = `SELECT  * from data_student ds
             LEFT JOIN deparments d on ds.deparmentID = d.deparment 
             LEFT JOIN visit_home v on ds.student = v.studentID
             WHERE student = ?`
-            let [res] = await knex.raw(query, [body.id]);
+            let [res] = await knex.raw(query, [ID]);
             console.log(res);
             knex.destroy();
             return { status: true, result: res };
@@ -85,6 +86,7 @@ var _model = {
         var knex = require('knex')(configs);
         try {
             await knex('data_student').where('student', '=', body.id).update({ is_active: 0 });
+            // await knex('visit_home').where('studentID', '=', body.id).update({ is_active: 0 });
             knex.destroy();
             return { status: true, result: 'Deleteted successfully' };
         } catch (error) {
@@ -128,6 +130,7 @@ var _model = {
         var knex = require('knex')(configs);
         try {
             await knex('data_student').where('student', '=', body.id).del();
+            await knex('visit_home').where('studentID', '=', body.id).del();
             knex.destroy();
             return { status: true, result: 'Delete Success' };
         } catch (error) {
@@ -179,7 +182,7 @@ var _model = {
                 date_visit: new Date(),
                 visit_by: body.visit_By,
             };
-            await knex('data_student').where('student', '=', idstd).update(is_visit = 1);
+            await knex('data_student').where('student', '=', idstd).update({ is_visit: 1 });
             await knex('visit_home').insert(obj);
             knex.destroy();
             return { status: true, result: 'Save Data Vist Success' };
