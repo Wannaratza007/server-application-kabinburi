@@ -1,21 +1,17 @@
+const { json } = require('express');
 var _model = require('./models');
 var _baseurl = '/server/student';
-
 
 module.exports = function (router) {
 
     //#region [new]
+
     router.post(_baseurl + '/get-student', async (req, res) => {
         let _result = await _model.get_student(req.body);
         res.json(_result);
     });
 
-    router.post(_baseurl + '/get-studentId', async (req, res) => {
-        let _result = await _model.get_studentId(req.body);
-        res.json(_result);
-    });
-
-    router.post(_baseurl + '/add-studentId', async (req, res) => {
+    router.post(_baseurl + '/add-student', async (req, res) => {
         let _result = await _model.add_studentId(req.body);
         res.json(_result);
     });
@@ -45,51 +41,26 @@ module.exports = function (router) {
         res.json(_result);
     });
 
-    router.post(_baseurl + '/pdf', async (req, res) => {
-        let _result = await _model. pdf(req.body);
+    router.post(_baseurl + '/signature', async (req, res) => {
+        let _result = await _model.signature(req.body);
         res.json(_result);
     });
- 
+
+    router.post(_baseurl + '/province', async (req, res) => {
+        let _result = await _model.province(req.body);
+        res.json(_result);
+    });
+
+    router.post(_baseurl + '/amphures', async (req, res) => {
+        let _result = await _model.amphures(req.body);
+        res.json(_result);
+    });
+
+    router.post(_baseurl + '/districts', async (req, res) => {
+        let _result = await _model.districts(req.body);
+        res.json(_result);
+    });
+
     //#endregion [new]
-
-    router.post('/gettStudentByDeparmentStudent', async function (req, res) {
-        let _result = await _model.getStudent(req.body);
-        res.json(_result);
-    });
-
-    router.post('/getStudentById', async function (req, res) {
-        let _result = await _model.getStudentById(req.body);
-        res.json(_result);
-    });
-
-    router.post('/insertStudent', async function (req, res) {
-        let _result = await _model.insertStudent(req.body);
-        res.json(_result);
-    });
-
-    router.post('/daleteStudent', async function (req, res) {
-        let _result = await _model.daleteStudent(req.body);
-        res.json(_result);
-    });
-
-    router.post('/reusedatdelete', async function (req, res) {
-        let _result = await _model.reusedatdelete(req.body);
-        res.json(_result);
-    });
-
-    router.post('/getdelete', async function (req, res) {
-        let _result = await _model.getdelete(req.body);
-        res.json(_result);
-    });
-
-    router.post('/deleteDataStudent', async function (req, res) {
-        let _result = await _model.deleteDataStudent(req.body);
-        res.json(_result);
-    });
-
-    router.post('/visitHome', async function (req, res) {
-        let _result = await _model.visitHome(req.body);
-        res.send(_result);
-    });
 
 } 

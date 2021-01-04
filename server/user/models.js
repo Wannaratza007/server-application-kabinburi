@@ -6,73 +6,47 @@ var _model = {
     //#region [new]
 
     signin: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         var md5 = require('md5');
+        console.log(body);
         try {
             let _pass = await md5(body.password);
             let query = `SELECT * FROM users u 
             LEFT JOIN deparments d ON u.deparmentID = d.deparment
             WHERE u.username = '${body.username}'  AND u.password = '${_pass}'`
             let [res] = await knex.raw(query);
-            console.log(res);
-            // let res = await knex('users')
-            //     .where('username', body.username)
-            //     .andWhere('password', _pass);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
             knex.destroy();
-            return { result: err.message, status: false };
-        }
-    },
-
-    signup_user: async (body) => {
-        var knex = require('knex')(configs);
-        console.log(body)
-        try {
-            let _pass = await md5(body.password)
-            let obj = {
-                firstname: body.firstname,
-                lastname: body.lastname,
-                username: body.username,
-                password: _pass,
-                status: 'user',
-                create_date: new Date(),
-            };
-            await knex('users').insert(obj);
-            knex.destroy();
-            return { status: true, result: 'signin successful' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.message };
+            return { result: err, status: false };
         }
     },
 
     signup_teacher: async (body) => {
-        var knex = require('knex')(configs);
-        console.log(body);
+        let knex = require('knex')(configs);
         try {
             let _pass = await md5(body.password)
             let obj = {
                 deparmentID: body.deparmentID,
+                prefix: body.prefix,
                 firstname: body.firstname,
                 lastname: body.lastname,
                 username: body.username,
                 password: _pass,
                 status: 'teacher',
-                create_date: new Date(),
             };
             await knex('users').insert(obj);
             knex.destroy();
             return { status: true, result: 'signin successful' };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     check_login: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             let [res] = await knex('users')
                 .where('firstname', body.firstname)
@@ -86,12 +60,12 @@ var _model = {
             }
         } catch (error) {
             knex.destroy();
-            return { result: error.message };
+            return { status: false, result: error };
         }
     },
 
     get_users: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             let res = await knex('user')
                 .where('firstname', 'like', `%${body.username}%`)
@@ -99,168 +73,43 @@ var _model = {
             return { status: true, result: res };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     list_users: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
-            let res = await knex('users').whereNot('status', '=', 'admin').limit(body.top);
+            var _query = `SELECT * FROM users u 
+            LEFT JOIN deparments d ON u.DeparmentID = d.Deparment
+            WHERE NOT status = 'admin' `;
+            if (body.firstnameSTD == '') {
+                _query += `LIMIT ${body.top}`;
+            } else {
+                _query += `AND firstname LIKE '%${body.firstnameSTD}%' `;
+            }
+            let [res] = await knex.raw(_query);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     delete_user: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             await knex('users').where('userID', '=', body.id).del();
             knex.destroy();
             return { status: true, result: 'Deleted successfully' };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.toString() };
+            return { status: false, result: error };
         }
     },
 
     //#endregion [new]
-
-
-
-
-
-
-
-
-
-    logins: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            let res = await knex('user')
-                .where('username', body.username)
-                .andWhere('password', body.password);
-            console.log(res);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { result: err.toString(), status: false };
-        }
-    },
-
-    checkuser: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            let [res] = await knex('user')
-                .where('firstname', body.firstname)
-                .andWhere('username', body.username);
-            if (res == 0 || res == null) {
-                knex.destroy();
-                return { status: true, result: 'Account not found' };
-            } else {
-                knex.destroy();
-                return { status: false, result: res };
-            }
-
-        } catch (error) {
-            knex.destroy();
-            return { result: error.toString() };
-        }
-    },
-
-    signins: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            let obj = {
-                firstname: body.firstname,
-                lastname: body.lastname,
-                username: body.username,
-                password: body.password,
-                status: 'user',
-                create_date: new Date(),
-            };
-            await knex('user').insert(obj);
-            knex.destroy();
-            return { status: true, result: 'signin successful' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    adduser: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            let obj = {
-                deparment: body.deparment,
-                firstname: body.firstname,
-                lastname: body.lastname,
-                username: body.username,
-                password: body.password,
-                status: 'teacher',
-                create_date: new Date(),
-            };
-            await knex('user').insert(obj);
-            knex.destroy();
-            return { status: true, result: 'Adduser Success' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    getuser: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            if (body.username == '' || body.username == null) {
-                var res = await knex('user').whereNot('status', '=', 'admin').limit(body.top);
-            } else {
-                var res = await knex('user')
-                    .where('firstname', 'like', `%${body.username}%`)
-            }
-            console.log(res);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    deleteUser: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            await knex('user').where('userID', '=', body.id).del();
-            knex.destroy();
-            return { status: true, result: 'Deleted successfully' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    getTeacher: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            let res = await knex('connect_teacher').limit(body.top);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    }
 
 }
 

@@ -9,11 +9,6 @@ module.exports = (router) => {
         res.json(_result);
     });
 
-    router.post(_baseurl + '/signup-user', async (req, res) => {
-        let _result = await _model.signup_user(req.body);
-        res.json(_result);
-    });
-
     router.post(_baseurl + '/signup-teacher', async (req, res) => {
         let _result = await _model.signup_teacher(req.body);
         res.json(_result);
@@ -38,58 +33,12 @@ module.exports = (router) => {
         let _result = await _model.delete_user(req.body);
         res.json(_result);
     });
+
+    router.post(_baseurl + '/site', async (req, res) => {
+        let _result = await _model.site(req.body);
+        res.json(_result);
+    });
+
     //#endregion [new]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    router.post('/logins', async function (req, res) {
-        let _result = await _model.logins(req.body);
-        res.json(_result);
-    });
-
-    router.post('/checkuser', async function (req, res) {
-        let _result = await _model.checkuser(req.body);
-        res.json(_result);
-    });
-
-    router.post('/signin', async function (req, res) {
-        let _result = await _model.signins(req.body);
-        res.json(_result);
-    });
-
-    router.post('/adduser', async function (req, res) {
-        let _result = await _model.adduser(req.body);
-        res.json(_result);
-    });
-
-    router.post('/getuser', async function (req, res) {
-        let _result = await _model.getuser(req.body);
-        res.json(_result);
-    });
-
-    router.post('/deleteUser', async function (req, res) {
-        let _result = await _model.deleteUser(req.body);
-        res.json(_result);
-    });
-
-    router.post('/getteacher', async function (req, res) {
-        let _result = await _model.getTeacher(req.body);
-        res.json(_result);
-    });
 
 } 

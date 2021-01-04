@@ -1,4 +1,3 @@
-var _port = 3000;
 module.exports = {
     database: {
         client: 'mysql',

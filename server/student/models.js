@@ -7,127 +7,120 @@ var _model = {
     //#region [new]
 
     get_student: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
-            var query = `SELECT * from data_student  std
-            LEFT JOIN deparments d on std.deparmentID = d.deparment  `;
+            let _query = `
+            SELECT 
+            ds.student, ds.deparmentID, d.deparment_name, ds.prefixSTD, ds.firstnameSTD, ds.lastnameSTD, ds.studygroup, 
+            ds.prefixGD, ds.firstnameGD, ds.lastnameGD, ds.is_visit, ds.longitude, ds.latitude, vh.visit,
+            vh.image_map, vh.image_visit, vh.behaviorD, vh.behaviorNotD, vh.signture, vh.problem, vh.suggestion, vh.name_parents, vh.visit_by,
+            vh.anotherRelevanceParents, vh.anotherLivingStatus, vh.anotherCharacteristicsAddress, vh.anotherComeToSchoolBy,
+            rp.name_th AS relevanceParents, ls.name_th AS livingStatus, ca.name_th AS characteristicsAddress, cb.name_th AS comeToSchoolBy
+            FROM data_student ds 
+            LEFT JOIN deparments d ON ds.deparmentID =  d.deparment 
+            LEFT JOIN visit_home vh ON vh.studentID = ds.student
+            LEFT JOIN relevance_parents rp ON vh.relevanceParentsID = rp.id 
+            LEFT JOIN living_status ls ON vh.livingStatusID = ls.id
+            LEFT JOIN characteristics_address ca ON vh.characteristicsAddressID = ca.id
+            LEFT JOIN come_to_school_by cb ON vh.comeToSchoolByID = cb.id
+            WHERE deparment_name = '${body.deparment}' AND  is_active = 1   `;
             if (body.firstnameSTD == '' || body.firstnameSTD == null) {
-                query += `WHERE deparment_name = '${body.deparment}' AND  is_active = 1  LIMIT ${body.top}`
+                _query += ` LIMIT ${body.top} `
             } else {
-                query += `WHERE deparment_name = '${body.deparment}' AND firstnameSTD LIKE '%${body.firstnameSTD}%' AND  is_active = 1 `;
+                _query += ` AND firstnameSTD LIKE '%${body.firstnameSTD}%' `;
             }
-            // let query = `SELECT * from data_student 
-            // LEFT JOIN deparments on data_student.deparmentID = deparments.deparment 
-            // WHERE deparment_name = '${body.deparment}'AND firstnameSTD LIKE '%${body.firstnameSTD}%' AND  is_active = 1 `
-            let [res] = await knex.raw(query);
+            let [res] = await knex.raw(_query);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: err.message };
-        }
-    },
-
-    get_studentId: async (body) => {
-        var knex = require('knex')(configs);
-        let ID = parseInt(body.id);
-        try {
-            var query = `SELECT  * from data_student ds
-            LEFT JOIN deparments d on ds.deparmentID = d.deparment 
-            LEFT JOIN visit_home v on ds.student = v.studentID
-            WHERE student = ?`
-            let [res] = await knex.raw(query, [ID]);
-            console.log(res);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     add_studentId: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             let obj = {
                 deparmentID: body.deparmentID,
-                codeSTD: body.codeSTD,
+                // codeSTD: body.codeSTD,
                 prefixSTD: body.prefixSTD,
                 firstnameSTD: body.firstNameSTD,
                 lastnameSTD: body.lastNameSTD,
-                phonesSTD: body.phonesSTD,
-                cardNumber: body.cardNumber,
+                // phonesSTD: body.phonesSTD,
+                // cardNumber: body.cardNumber,
                 studygroup: body.studygroup,
                 prefixGD: body.prefixGD,
                 firstnameGD: body.firstNameGD,
                 lastnameGD: body.lastNameGD,
-                phonesGD: body.phonesGD,
+                // phonesGD: body.phonesGD,
                 numberHomes: body.numberHomes,
                 village: body.village,
                 road: body.road,
-                // 
-                // province: body,
-                // aumphuer: body,
-                // district: body,
-                // // 
-                // post: body.post,
+                alley: body.alley,
+                province: body.province,
+                aumphuer: body.amphures,
+                district: body.districts,
+                post: body.post,
             }
-            // return;
             await knex('data_student').insert(obj);
             knex.destroy();
-            return { status: true, result: 'Inserted successfully' };
+            return { status: true, result: 'Inserted successfully' }; cc
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.toString() };
+            return { status: false, result: error };
         }
     },
 
     teacher_delete: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             await knex('data_student').where('student', '=', body.id).update({ is_active: 0 });
-            // await knex('visit_home').where('studentID', '=', body.id).update({ is_active: 0 });
             knex.destroy();
             return { status: true, result: 'Deleteted successfully' };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     reuse_student: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             await knex('data_student').where('student', '=', body.id).update({ is_active: 1 });
             knex.destroy();
             return { status: true, result: 'Reuse Data successfully' };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     get_student_delete: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
-            var query = `SELECT * from data_student std
-            LEFT JOIN deparments d on std.deparmentID = d.deparment `;
+            console.log(555555555555555);
+            var query = `SELECT std.student, std.prefixSTD, std.firstnameSTD, std.lastnameSTD, std.studygroup, 
+            std.prefixGD, std.firstnameGD, std.lastnameGD, std.deparmentID, d.deparment_name
+            from data_student  std
+            LEFT JOIN deparments d on std.deparmentID = d.deparment 
+            WHERE is_active = 0 `;
             if (body.firstnameSTD == '' || body.firstnameSTD == null) {
-                query += `Where is_active = 0 limit ${body.top}`;
+                query += ` limit ${body.top} `;
             } else {
-                query += `Where  firstnameSTD Like '%${body.firstnameSTD}%' AND is_active = 0`;
+                query += ` Where  firstnameSTD Like '%${body.firstnameSTD}%'`;
             }
-            var [res] = await knex.raw(query);
+            let [res] = await knex.raw(query);
             knex.destroy();
             return { status: true, result: res };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
         }
     },
 
     delete_student: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             await knex('data_student').where('student', '=', body.id).del();
             await knex('visit_home').where('studentID', '=', body.id).del();
@@ -135,19 +128,43 @@ var _model = {
             return { status: true, result: 'Delete Success' };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
+        }
+    },
+
+    signature: async function (body) {
+        let knex = require('knex')(configs);
+        try {
+            var name = body.name;
+            var img = body.image;
+            var realFile = Buffer.from(img, "base64");
+            var Extension = name.substr(name.lastIndexOf('.') + 1);
+            name = "signature" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
+            var path = '../../image/signature/';
+            fs.writeFile(__dirname + (path + name), realFile, function (err) {
+                if (err)
+                    console.log(err);
+            });
+            console.log(realFile);
+            // let idvisit = await knex.returning('visit').insert({ signture: name, studentID: body.idSTD }).into("visit_home");
+            await knex('visit_home').insert({ signture: name, studentID: body.idSTD });
+            knex.destroy();
+            return { status: true, result: 'Save Successted' };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error };
         }
     },
 
     visthome_student: async (body) => {
-        var knex = require('knex')(configs);
+        let knex = require('knex')(configs);
         try {
             // Visit
             var namevisit = body.fileNamevisit;
             var imgvisit = body.base64Imagevisit;
             var realFilevisit = Buffer.from(imgvisit, "base64");
             var Extension = namevisit.substr(namevisit.lastIndexOf('.') + 1);
-            namevisit = "Messages" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
+            namevisit = "visit" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
             var path = '../../image/visit/';
             console.log("Name Image :" + namevisit);
             fs.writeFile(__dirname + (path + namevisit), realFilevisit, function (err) {
@@ -160,7 +177,7 @@ var _model = {
             var imgaddress = body.base64ImageAddress;
             var realFileaddress = Buffer.from(imgaddress, "base64");
             var Extension = nameaddress.substr(nameaddress.lastIndexOf('.') + 1);
-            nameaddress = "Messages" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
+            nameaddress = "address" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
             var path = '../../image/address/';
             console.log("Name Image :" + nameaddress);
             fs.writeFile(__dirname + (path + nameaddress), realFileaddress, function (err) {
@@ -170,10 +187,18 @@ var _model = {
 
             let idstd = parseInt(body.studenID);
             // insert data to database
-            var obj = {
-                studentID: idstd,
+            let obj_visit = {
+                // studentID: idstd,
                 image_visit: namevisit,
                 image_map: nameaddress,
+                relevanceParentsID: body.relevanceParentsID,
+                anotherRelevanceParents: body.anotherRelevanceParents,
+                livingStatusID: body.livingStatusID,
+                anotherLivingStatus: body.anotherLivingStatus,
+                characteristicsAddressID: body.characteristicsAddressID,
+                anotherCharacteristicsAddress: body.anotherCharacteristicsAddress,
+                comeToSchoolByID: body.comeToSchoolByID,
+                anotherComeToSchoolBy: body.anotherComeToSchoolBy,
                 suggestion: body.suggestion,
                 behaviorD: body.behaviorD,
                 behaviorNotD: body.behaviorNotD,
@@ -182,228 +207,65 @@ var _model = {
                 date_visit: new Date(),
                 visit_by: body.visit_By,
             };
-            await knex('data_student').where('student', '=', idstd).update({ is_visit: 1 });
-            await knex('visit_home').insert(obj);
+            let obj_student = {
+                is_visit: 1,
+                latitude: body.latitude,
+                longitude: body.longitude,
+            };
+            await knex('data_student').where('student', '=', idstd).update(obj_student);
+            await knex('visit_home').where('studentID', '=', idstd).update(obj_visit);
             knex.destroy();
             return { status: true, result: 'Save Data Vist Success' };
         } catch (error) {
             knex.destroy();
-            return { status: false, result: error.message };
+            return { status: false, result: error };
+        }
+    },
+
+    province: async (body) => {
+        let knex = require('knex')(configs);
+        try {
+            let _query = `SELECT id, name_th FROM provinces`;
+            let [res] = await knex.raw(_query);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error };
+        }
+    },
+
+    amphures: async (body) => {
+        let knex = require('knex')(configs);
+        try {
+            let _query = `SELECT a.id, a.name_th FROM provinces p
+            LEFT JOIN amphures a ON p.id = a.province_id
+            WHERE a.province_id = ? `;
+            let [res] = await knex.raw(_query, [body.idprovince]);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error };
+        }
+    },
+
+    districts: async (body) => {
+        let knex = require('knex')(configs);
+        try {
+            let _query = `SELECT  d.name_th, d.zip_code FROM amphures a
+            LEFT JOIN districts d ON a.id = d.amphure_id
+            WHERE a.id = ? `;
+            let [res] = await knex.raw(_query, [body.idamphures]);
+            knex.destroy();
+            return { status: true, result: res };
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error };
         }
     },
 
     //#endregion [new]
-
-    getStudent: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            var queryStudent = `SELECT * FROM student   WHERE is_active = 1`
-            if (body.Deparment === 'แผนกวิชาคอมพิวเตอร์ธุรกิจ') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment = 'คอมพิวเตอร์ธุรกิจ' AND firstNameSTD LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment = 'คอมพิวเตอร์ธุรกิจ' LIMIT ${body.top}`
-                }
-            } else if (body.Deparment === 'แผนกวิชาการบัญชี') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment = 'การบัญชี' AND firstNameSTD LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment = 'การบัญชี' LIMIT ${body.top}`
-                }
-            } else if (body.Deparment === 'แผนกวิชาช่างซ่อมบำรุง') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment IN ('ช่างซ่อมบำรุง', 'เทคนิคอุตสาหกรรม') LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment IN ('ช่างซ่อมบำรุง', 'เทคนิคอุตสาหกรรม') LIMIT ${body.top}`
-                }
-            } else if (body.Deparment === 'แผนกวิชาธุรกิจค้าปลีก') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment IN ('ธุรกิจค้าปลีก', 'การจัดการธุรกิจค้าปลีก') LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment IN ('ธุรกิจค้าปลีก', 'การจัดการธุรกิจค้าปลีก') LIMIT ${body.top}`
-                }
-            } else if (body.Deparment === 'แผนกวิชาช่างยนต์') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment IN ('ช่างยนต์', 'เทคนิคเครื่องกล') LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment IN ('ช่างยนต์', 'เทคนิคเครื่องกล') LIMIT ${body.top}`
-                }
-            } else if (body.Deparment === 'แผนกวิชาช่างไฟฟ้ากำลัง') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment IN ('ช่างไฟฟ้ากำลัง', 'ไฟฟ้า') LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment IN ('ช่างไฟฟ้ากำลัง', 'ไฟฟ้า') LIMIT ${body.top}`
-                }
-            } else if (body.Deparment === 'แผนกวิชาช่างอิเล็กทรอนิกส์') {
-                if (body.firstNameSTD != '' || body.lastNameSTD != null) {
-                    queryStudent += ` AND deparment IN ('ช่างอิเล็กทรอนิกส์', 'อิเล็กทรอนิกส์') LIKE '%${body.firstNameSTD}%'`
-                } else {
-                    queryStudent += ` AND deparment IN ('ช่างอิเล็กทรอนิกส์', 'อิเล็กทรอนิกส์') LIMIT ${body.top}`
-                }
-            }
-            let [res] = await knex.raw(queryStudent);
-            console.log(res);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: err.toString() };
-        }
-    },
-
-    getStudentById: async function (body) {
-        var knex = require('knex')(configs);
-        console.log("body");
-        console.log(body);
-        try {
-            var query = `SELECT * FROM student std 
-            LEFT JOIN visiter vst ON std.studenID = vst.StudentID 
-            WHERE std.studenID = ${body.id}`
-            console.log(query);
-            let [res] = await knex.raw(query);
-            console.log(res);
-            knex.destroy();
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    insertStudent: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            let obj = {
-                prefixSTD: body.prefixSTD,
-                firstNameSTD: body.firstNameSTD,
-                lastNameSTD: body.lastNameSTD,
-                phonesSTD: body.phonesSTD,
-                cardNumber: body.cardNumber,
-                deparment: body.deparment,
-                studygroup: body.studygroup,
-                prefixGD: body.prefixGD,
-                firstNameGD: body.firstNameGD,
-                lastNameGD: body.lastNameGD,
-                phonesGD: body.phonesGD,
-                numberHomes: body.numberHomes,
-                village: body.village,
-                road: body.road,
-                /*
-                province : body.province,
-                aumphuer : body.aumphuer,
-                district : body.district,
-                */
-                post: body.post,
-                is_active: 1
-            }
-            await knex('student').insert(obj);
-            knex.destroy();
-            return { status: true, result: 'Inserted successfully' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    daleteStudent: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            await knex('student').where('studenID', '=', body.id).update({ is_active: 0 });
-            knex.destroy();
-            return { status: true, result: 'Deleteted successfully' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    reusedatdelete: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            await knex('student').where('studenID', '=', body.id).update({ is_active: 1 });
-            knex.destroy();
-            return { status: true, result: 'Deleteted successfully' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    getdelete: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            var query = `select * from student where is_active = 0`
-            if (body.firstNameSTD == '' || body.firstNameSTD == null) {
-                query += ` LIMIT ${body.top}`
-            } else {
-                query += ` and firstNameSTD Like '%${body.firstNameSTD}%'`
-            }
-            console.log(query);
-            let [res] = await knex.raw(query);
-            console.log(res);
-            knex.destroy()
-            return { status: true, result: res };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    deleteDataStudent: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            await knex('student').where('studenID', '=', body.id).del();
-            knex.destroy();
-            return { status: true, result: 'Delete Success' };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.toString() };
-        }
-    },
-
-    visitHome: async function (body) {
-        var knex = require('knex')(configs);
-        console.log(body);
-        try {
-            //#region [Image Addresses]
-            var nameaddress = body.name_image_address;
-            var imgaddress = body.image_address;
-            console.log('nameaddress', nameaddress);
-            console.log('imgaddress', imgaddress);
-            knex.destroy();
-            return { status: true, };
-            //#endregion 
-
-            //#region [Image_Map]
-            var namemap = body.name_image_map;
-            var imgmap = body.image_map;
-            console.log('namemap', namemap);
-            console.log('imgmap', imgmap);
-            var realFile = Buffer.from(imgmap, "base64");
-            var Extension = namemap.substr(namemap.lastIndexOf('.') + 1);
-            namemap = "Messages" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
-            var path = '../../image/visit/';
-            console.log("Name Image :" + namemap);
-            fs.writeFile(__dirname + (path + namemap), realFile, function (err) {
-                if (err)
-                    console.log(err);
-            });
-            console.log(realFile);
-            //#endregion
-            knex.destroy();
-            return { status: true };
-        } catch (error) {
-            knex.destroy();
-            return { status: false, result: error.message };
-        }
-    }
-
 }
 
 module.exports = _model;
