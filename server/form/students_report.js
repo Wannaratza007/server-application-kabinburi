@@ -177,7 +177,7 @@ var _model = {
                     width: 50,
                     height: 50,
                     alignment: 'center',
-                    margin: [0, 10, 0, 10],
+                    margin: [0, 40, 0, 10],
                 },
                 {
                     text: "วิทยาลัยการอาชีพกบินทร์บุรี แบบบันทึกการเยี่ยมบ้าน",
@@ -197,11 +197,11 @@ var _model = {
                                 },
                                 {
                                     width: 35,
-                                    text: _items.prefixSTD == null || _items.prefixSTD == "" ? '............' : _items.prefixSTD
+                                    text: _items.prefixSTD == null || _items.prefixSTD == "" ? '-' : _items.prefixSTD
                                 },
                                 {
                                     width: 100,
-                                    text: _items.firstnameSTD == null || _items.firstnameSTD == "" ? '......................................' : _items.firstnameSTD
+                                    text: _items.firstnameSTD == null || _items.firstnameSTD == "" ? '-' : _items.firstnameSTD
                                 },
                                 {
                                     width: 40,
@@ -209,7 +209,7 @@ var _model = {
                                 },
                                 {
                                     width: 100,
-                                    text: _items.lastnameSTD == null || _items.lastnameSTD == "" ? '......................................' : _items.lastnameSTD
+                                    text: _items.lastnameSTD == null || _items.lastnameSTD == "" ? '-' : _items.lastnameSTD
                                 },
                                 {
                                     width: 45,
@@ -217,7 +217,7 @@ var _model = {
                                 },
                                 {
                                     width: 80,
-                                    text: _items.deparment_name == null || _items.deparment_name == "" ? '..............................' : _items.deparment_name
+                                    text: _items.deparment_name == null || _items.deparment_name == "" ? '-' : _items.deparment_name
                                 },
                             ],
                         },
@@ -236,7 +236,7 @@ var _model = {
                                 },
                                 {
                                     width: 70,
-                                    text: _items.firstnameGD == null || _items.firstnameGD == "" ? '...........................' : _items.firstnameGD
+                                    text: _items.firstnameGD == null || _items.firstnameGD == "" ? '-' : _items.firstnameGD
                                 },
                                 {
                                     width: 40,
@@ -244,7 +244,7 @@ var _model = {
                                 },
                                 {
                                     width: 70,
-                                    text: _items.lastnameGD == null || _items.lastnameGD == "" ? '...........................' : _items.lastnameGD
+                                    text: _items.lastnameGD == null || _items.lastnameGD == "" ? '-' : _items.lastnameGD
                                 },
                                 {
                                     width: 80,
@@ -252,7 +252,7 @@ var _model = {
                                 },
                                 {
                                     width: 85,
-                                    text: _items.phonesGD == null || _items.phonesGD == "" ? '................................' : _items.phonesGD
+                                    text: _items.phonesGD == null || _items.phonesGD == "" ? '-' : _items.phonesGD
                                 },
                             ],
                         },
@@ -267,7 +267,7 @@ var _model = {
                                 },
                                 {
                                     width: 30,
-                                    text: _items.numberHomes == null || _items.numberHomes == "" ? '............' : _items.numberHomes
+                                    text: _items.numberHomes == null || _items.numberHomes == "" ? '-' : _items.numberHomes
                                 },
                                 {
                                     width: 25,
@@ -275,7 +275,7 @@ var _model = {
                                 },
                                 {
                                     width: 30,
-                                    text: _items.village == null || _items.village == "" ? '............' : _items.village
+                                    text: _items.village == null || _items.village == "" ? '-' : _items.village
                                 },
                                 {
                                     width: 25,
@@ -283,7 +283,7 @@ var _model = {
                                 },
                                 {
                                     width: 75,
-                                    text: _items.alley == null || _items.alley == "" ? '............................' : _items.alley
+                                    text: _items.alley == null || _items.alley == "" ? '-' : _items.alley
                                 },
                                 {
                                     width: 25,
@@ -291,7 +291,7 @@ var _model = {
                                 },
                                 {
                                     width: 75,
-                                    text: _items.road == null || _items.road == "" ? '............................' : _items.road
+                                    text: _items.road == null || _items.road == "" ? '-' : _items.road
                                 },
                                 {
                                     width: 30,
@@ -299,7 +299,7 @@ var _model = {
                                 },
                                 {
                                     width: 80,
-                                    text: _items.district == null || _items.district == "" ? '..............................' : _items.district
+                                    text: _items.district == null || _items.district == "" ? '-' : _items.district
                                 },
 
                             ],
@@ -312,7 +312,7 @@ var _model = {
                                 },
                                 {
                                     width: 75,
-                                    text: _items.aumphuer == null || _items.aumphuer == "" ? '............................' : _items.aumphuer
+                                    text: _items.aumphuer == null || _items.aumphuer == "" ? '-' : _items.aumphuer
                                 },
                                 {
                                     width: 35,
@@ -320,7 +320,7 @@ var _model = {
                                 },
                                 {
                                     width: 75,
-                                    text: _items.province == null || _items.province == "" ? '............................' : _items.province
+                                    text: _items.province == null || _items.province == "" ? '-' : _items.province
                                 },
                                 {
                                     width: 60,
@@ -328,7 +328,7 @@ var _model = {
                                 },
                                 {
                                     width: 80,
-                                    text: _items.post == null || _items.post == "" ? '............................' : _items.post
+                                    text: _items.post == null || _items.post == "" ? '-' : _items.post
                                 },
                             ],
                         },

@@ -9,8 +9,7 @@ var _model = {
     get_student: async (body) => {
         let knex = require('knex')(configs);
         try {
-            let _query = `
-            SELECT 
+            let _query = `SELECT 
             ds.student, ds.deparmentID, d.deparment_name, ds.prefixSTD, ds.firstnameSTD, ds.lastnameSTD, ds.studygroup, 
             ds.prefixGD, ds.firstnameGD, ds.lastnameGD, ds.is_visit, ds.longitude, ds.latitude, vh.visit,
             vh.image_map, vh.image_visit, vh.behaviorD, vh.behaviorNotD, vh.signture, vh.problem, vh.suggestion, vh.name_parents, vh.visit_by,
