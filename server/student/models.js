@@ -10,8 +10,9 @@ var _model = {
         let knex = require('knex')(configs);
         try {
             let _query = `SELECT 
-            ds.student, ds.deparmentID, d.deparment_name, ds.prefixSTD, ds.firstnameSTD, ds.lastnameSTD, ds.studygroup, 
-            ds.prefixGD, ds.firstnameGD, ds.lastnameGD, ds.is_visit, ds.longitude, ds.latitude, vh.visit,
+            ds.student, ds.deparmentID, d.deparment_name, ds.prefixSTD, ds.firstnameSTD, ds.lastnameSTD, ds.phonesSTD, ds.studygroup, 
+            ds.prefixGD, ds.firstnameGD, ds.lastnameGD, ds.phonesGD, ds.numberHomes, ds.alley, ds.village, ds.road, 
+            ds.province, ds.aumphuer, ds.district, ds.is_visit, ds.longitude, ds.latitude, vh.visit,
             vh.image_map, vh.image_visit, vh.behaviorD, vh.behaviorNotD, vh.signture, vh.problem, vh.suggestion, vh.name_parents, vh.visit_by,
             vh.anotherRelevanceParents, vh.anotherLivingStatus, vh.anotherCharacteristicsAddress, vh.anotherComeToSchoolBy,
             rp.name_th AS relevanceParents, ls.name_th AS livingStatus, ca.name_th AS characteristicsAddress, cb.name_th AS comeToSchoolBy
@@ -46,13 +47,13 @@ var _model = {
                 prefixSTD: body.prefixSTD,
                 firstnameSTD: body.firstNameSTD,
                 lastnameSTD: body.lastNameSTD,
-                // phonesSTD: body.phonesSTD,
+                phonesSTD: body.phonesSTD,
                 // cardNumber: body.cardNumber,
                 studygroup: body.studygroup,
                 prefixGD: body.prefixGD,
                 firstnameGD: body.firstNameGD,
                 lastnameGD: body.lastNameGD,
-                // phonesGD: body.phonesGD,
+                phonesGD: body.phonesGD,
                 numberHomes: body.numberHomes,
                 village: body.village,
                 road: body.road,
@@ -63,6 +64,39 @@ var _model = {
                 post: body.post,
             }
             await knex('data_student').insert(obj);
+            knex.destroy();
+            return { status: true, result: 'Inserted successfully' }; cc
+        } catch (error) {
+            knex.destroy();
+            return { status: false, result: error };
+        }
+    },
+
+    update_student: async (body) => {
+        let knex = require('knex')(configs);
+        try {
+            let obj = {
+                // codeSTD: body.codeSTD,
+                prefixSTD: body.prefixSTD,
+                firstnameSTD: body.firstNameSTD,
+                lastnameSTD: body.lastNameSTD,
+                phonesSTD: body.phonesSTD,
+                // cardNumber: body.cardNumber,
+                studygroup: body.studygroup,
+                prefixGD: body.prefixGD,
+                firstnameGD: body.firstNameGD,
+                lastnameGD: body.lastNameGD,
+                phonesGD: body.phonesGD,
+                numberHomes: body.numberHomes,
+                village: body.village,
+                road: body.road,
+                alley: body.alley,
+                province: body.province,
+                aumphuer: body.amphures,
+                district: body.districts,
+                post: body.post,
+            }
+            await knex('data_student').where('student' , '=', body.id).update(obj);
             knex.destroy();
             return { status: true, result: 'Inserted successfully' }; cc
         } catch (error) {

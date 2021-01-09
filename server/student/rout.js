@@ -16,6 +16,11 @@ module.exports = function (router) {
         res.json(_result);
     });
 
+    router.post(_baseurl + '/update-student', async (req, res) => {
+        let _result = await _model.update_student(req.body);
+        res.json(_result);
+    });
+
     router.post(_baseurl + '/teacher-delete', async (req, res) => {
         let _result = await _model.teacher_delete(req.body);
         res.json(_result);
