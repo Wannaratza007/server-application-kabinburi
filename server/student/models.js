@@ -246,7 +246,7 @@ var _model = {
                 longitude: body.longitude,
             };
             await knex('data_student').where('student', '=', idstd).update(obj_student);
-            await knex('visit_home').where('studentID', '=', idstd).update(obj_visit);
+            await knex('visit_home').where('studentID', '=', body.studenID).update(obj_visit);
             knex.destroy();
             return { status: true, result: 'Save Data Vist Success' };
         } catch (error) {
