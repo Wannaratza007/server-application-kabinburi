@@ -13,10 +13,14 @@ var _model = {
             let _pass = await md5(body.password);
             let query = `SELECT * FROM users u 
             LEFT JOIN deparments d ON u.deparmentID = d.deparment
-            WHERE u.username = '${body.username}'  AND u.password = '${_pass}'`
-            let [res] = await knex.raw(query);
+            WHERE u.username = ?  AND u.password = ?`
+            let [res] = await knex.raw(query, [body.username, _pass]);
             knex.destroy();
-            return { status: true, result: res };
+            if (res.length > 0) {
+                return { status: true, result: res };
+            } else {
+                return { status: false, result: res };
+            }
         } catch (error) {
             knex.destroy();
             return { result: err, status: false };
