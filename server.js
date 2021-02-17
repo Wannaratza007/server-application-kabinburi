@@ -15,5 +15,6 @@ require('./server/student/rout')(app);
 require('./server/dashboard/rout')(app);
 require('./server/form/route')(app);
 
+
 app.get('/', (req, res) => res.send('WElCOME TO KABINBURY SERVER'));
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));

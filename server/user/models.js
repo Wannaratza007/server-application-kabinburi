@@ -1,5 +1,5 @@
 const configs = require('../../config/database');
-var md5 = require('md5');
+let md5 = require('md5');
 
 var _model = {
 
@@ -7,13 +7,12 @@ var _model = {
 
     signin: async (body) => {
         let knex = require('knex')(configs);
-        var md5 = require('md5');
         console.log(body);
         try {
             let _pass = await md5(body.password);
             let query = `SELECT * FROM users u 
             LEFT JOIN deparments d ON u.deparmentID = d.deparment
-            WHERE u.username = ?  AND u.password = ?`
+            WHERE u.username = ?  AND u.password = ? ;`;
             let [res] = await knex.raw(query, [body.username, _pass]);
             knex.destroy();
             if (res.length > 0) {
@@ -23,7 +22,7 @@ var _model = {
             }
         } catch (error) {
             knex.destroy();
-            return { result: err, status: false };
+            return { status: false, result: error.message };
         }
     },
 

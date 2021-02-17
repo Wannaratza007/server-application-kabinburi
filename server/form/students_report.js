@@ -45,13 +45,13 @@ var _model = {
         let anotherRelevance = 'อื่น ๆ (ระบุ)..................'
 
         switch (_items.relevanceParentsID) {
-            case 1:
+            case '1':
                 relevanceParentsBox1 = "./server/form/img/checkbox.png";
                 break;
-            case 2:
+            case '2':
                 relevanceParentsBox2 = "./server/form/img/checkbox.png";
                 break;
-            case 3:
+            case '3':
                 relevanceParentsBox3 = "./server/form/img/checkbox.png";
                 anotherRelevance = 'อื่น ๆ ' + _items.anotherRelevanceParents;
                 break;
@@ -73,34 +73,34 @@ var _model = {
         let anotherLiving = 'อื่น ๆ (ระบุ)..................';
 
         switch (_items.livingStatusID) {
-            case 1:
+            case '1':
                 livingStatus1 = "./server/form/img/checkbox.png";
                 break;
-            case 2:
+            case '2':
                 livingStatus2 = "./server/form/img/checkbox.png";
                 break;
-            case 3:
+            case '3':
                 livingStatus3 = "./server/form/img/checkbox.png";
                 break;
-            case 4:
+            case '4':
                 livingStatus4 = "./server/form/img/checkbox.png";
                 break;
-            case 5:
+            case '5':
                 livingStatus5 = "./server/form/img/checkbox.png";
                 break;
-            case 6:
+            case '6':
                 livingStatus6 = "./server/form/img/checkbox.png";
                 break;
-            case 7:
+            case '7':
                 livingStatus7 = "./server/form/img/checkbox.png";
                 break;
-            case 8:
+            case '8':
                 livingStatus8 = "./server/form/img/checkbox.png";
                 break;
-            case 9:
+            case '9':
                 livingStatus9 = "./server/form/img/checkbox.png";
                 break;
-            case 10:
+            case '10':
                 livingStatus10 = "./server/form/img/checkbox.png";
                 anotherLiving = 'อื่น ๆ ' + _items.anotherLivingStatus;
                 break;
@@ -118,22 +118,22 @@ var _model = {
         let notherCharacteristics = 'อื่น ๆ (ระบุ)..................';
 
         switch (_items.characteristicsAddressID) {
-            case 1:
+            case '1':
                 characteristicsAddress1 = "./server/form/img/checkbox.png";
                 break;
-            case 2:
+            case '2':
                 characteristicsAddress2 = "./server/form/img/checkbox.png";
                 break;
-            case 3:
+            case '3':
                 characteristicsAddress3 = "./server/form/img/checkbox.png";
                 break;
-            case 4:
+            case '4':
                 characteristicsAddress4 = "./server/form/img/checkbox.png";
                 break;
-            case 5:
+            case '5':
                 characteristicsAddress5 = "./server/form/img/checkbox.png";
                 break;
-            case 6:
+            case '6':
                 characteristicsAddress6 = "./server/form/img/checkbox.png";
                 notherCharacteristics = 'อื่น ๆ ' + _items.anotherCharacteristicsAddress;
                 break;
@@ -149,19 +149,19 @@ var _model = {
         let anotherComeToSchool = 'อื่น ๆ (ระบุ)..................................................';
 
         switch (_items.comeToSchoolByID) {
-            case 1:
+            case '1':
                 comeToSchoolBy1 = "./server/form/img/checkbox.png";
                 break;
-            case 2:
+            case '2':
                 comeToSchoolBy2 = "./server/form/img/checkbox.png";
                 break;
-            case 3:
+            case '3':
                 comeToSchoolBy3 = "./server/form/img/checkbox.png";
                 break;
-            case 4:
+            case '4':
                 comeToSchoolBy4 = "./server/form/img/checkbox.png";
                 break;
-            case 5:
+            case '5':
                 comeToSchoolBy5 = "./server/form/img/checkbox.png";
                 anotherComeToSchool = 'อื่น ๆ ' + _items.anotherComeToSchoolBy;
                 break;
@@ -196,11 +196,11 @@ var _model = {
                                     text: 'ชื่อ',
                                 },
                                 {
-                                    width: 35,
+                                    width: 40,
                                     text: _items.prefixSTD == null || _items.prefixSTD == "" ? '-' : _items.prefixSTD
                                 },
                                 {
-                                    width: 100,
+                                    width: 105,
                                     text: _items.firstnameSTD == null || _items.firstnameSTD == "" ? '-' : _items.firstnameSTD
                                 },
                                 {
@@ -216,7 +216,7 @@ var _model = {
                                     text: 'แผนกวิชา'
                                 },
                                 {
-                                    width: 80,
+                                    width: 110,
                                     text: _items.deparment_name == null || _items.deparment_name == "" ? '-' : _items.deparment_name
                                 },
                             ],
@@ -247,11 +247,11 @@ var _model = {
                                     text: _items.lastnameGD == null || _items.lastnameGD == "" ? '-' : _items.lastnameGD
                                 },
                                 {
-                                    width: 80,
+                                    width: 100,
                                     text: 'หมายเลขโทรศัพท์'
                                 },
                                 {
-                                    width: 85,
+                                    width: 120,
                                     text: _items.phonesGD == null || _items.phonesGD == "" ? '-' : _items.phonesGD
                                 },
                             ],
@@ -282,7 +282,7 @@ var _model = {
                                     text: 'ซอย',
                                 },
                                 {
-                                    width: 75,
+                                    width: 80,
                                     text: _items.alley == null || _items.alley == "" ? '-' : _items.alley
                                 },
                                 {
@@ -290,7 +290,7 @@ var _model = {
                                     text: 'ถนน'
                                 },
                                 {
-                                    width: 75,
+                                    width: 80,
                                     text: _items.road == null || _items.road == "" ? '-' : _items.road
                                 },
                                 {
@@ -298,7 +298,7 @@ var _model = {
                                     text: 'ตำบล',
                                 },
                                 {
-                                    width: 80,
+                                    width: 125,
                                     text: _items.district == null || _items.district == "" ? '-' : _items.district
                                 },
 
@@ -311,7 +311,7 @@ var _model = {
                                     text: 'อำเภอ'
                                 },
                                 {
-                                    width: 75,
+                                    width: 80,
                                     text: _items.aumphuer == null || _items.aumphuer == "" ? '-' : _items.aumphuer
                                 },
                                 {
@@ -319,7 +319,7 @@ var _model = {
                                     text: 'จังหวัด',
                                 },
                                 {
-                                    width: 75,
+                                    width: 80,
                                     text: _items.province == null || _items.province == "" ? '-' : _items.province
                                 },
                                 {

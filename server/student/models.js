@@ -132,7 +132,6 @@ var _model = {
     get_student_delete: async (body) => {
         let knex = require('knex')(configs);
         try {
-            console.log(555555555555555);
             var query = `SELECT std.student, std.prefixSTD, std.firstnameSTD, std.lastnameSTD, std.studygroup, 
             std.prefixGD, std.firstnameGD, std.lastnameGD, std.deparmentID, d.deparment_name
             from data_student  std
@@ -175,12 +174,9 @@ var _model = {
             name = "signature" + dateFormat(new Date(), "yyyymmddhhMMss") + "." + Extension;
             var path = '../../image/signature/';
             fs.writeFile(__dirname + (path + name), realFile, function (err) {
-                if (err) console.log(err);
+                if (err) return { status: false, result: err };
             });
-            console.log("__dirname + (path + name)");
-            console.log(__dirname + (path + name));
             console.log(realFile);
-            return;
             // let idvisit = await knex.returning('visit').insert({ signture: name, studentID: body.idSTD }).into("visit_home");
             await knex('visit_home').insert({ signture: name, studentID: body.idSTD });
             knex.destroy();
@@ -203,7 +199,7 @@ var _model = {
             var path = '../../image/visit/';
             console.log("Name Image :" + namevisit);
             fs.writeFile(__dirname + (path + namevisit), realFilevisit, function (err) {
-                if (err) console.log(err);
+                if (err) return { status: false, result: err };
             });
 
             // Address
@@ -215,7 +211,7 @@ var _model = {
             var path = '../../image/address/';
             console.log("Name Image :" + nameaddress);
             fs.writeFile(__dirname + (path + nameaddress), realFileaddress, function (err) {
-                if (err) console.log(err);
+                if (err) return { status: false, result: err };
             });
 
             let idstd = parseInt(body.studenID);
